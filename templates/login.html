@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.2.3/dist/cdn.min.js"
+    ></script>
+    <style>
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background-color: rgb(75, 135, 230);
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: rgb(42, 108, 214);
+      }
+
+      ::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+
+      .custom-shape-divider-bottom-1709192263 {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        overflow: hidden;
+        line-height: 0;
+        transform: rotate(180deg);
+      }
+
+      .custom-shape-divider-bottom-1709192263 svg {
+        position: relative;
+        display: block;
+        width: calc(123% + 1.3px);
+        height: 96px;
+      }
+
+      .custom-shape-divider-bottom-1709192263 .shape-fill {
+        fill: #ffffff;
+      }
+    </style>
+  </head>
+  <body class="overflow-x-hidden">
+    <div
+      class="flex h-screen w-full flex-col items-center justify-center space-y-6 bg-blue-400"
+    >
+      <div class="flex h-20 w-[19rem] items-center justify-center">
+        <div class="h-14 w-[9.5rem] rounded-full bg-black">
+          <img class="rounded-full" src="static/images/logo.png" alt="" />
+        </div>
+        <h1 class="ml-2 text-sm font-bold leading-tight text-white">
+          An
+          <a class="text-black" href="https://github.com/ERRORLY/DispoChat"
+            >OpenSource </a
+          >Project That Do Care About Your Privacy.
+          <span class="text-black"> This Owl Doesn't Collect Any Data.</span>
+        </h1>
+      </div>
+      <div
+        class="flex h-[15rem] w-[20rem] flex-col rounded-lg bg-white sm:h-[15rem] sm:w-[27rem]"
+      >
+        <h1
+          class="mt-5 text-center text-[1.2rem] font-extrabold sm:mt-6 sm:text-2xl"
+        >
+          Create A Disposable ChatRoom
+        </h1>
+        <form
+          method="post"
+          action="{{ url_for('chatroom', room='', nickname='') }}"
+          class="mt-6 flex flex-col items-center"
+        >
+          <input
+            placeholder="Pick Your Nickname"
+            type="text"
+            id="nickname"
+            name="nickname"
+            class="mb-2 w-[14rem] rounded-md border-2 border-blue-500 p-0.5 focus:border-blue-800 focus:outline-none sm:w-[17rem]"
+            required
+          />
+
+          <input
+            placeholder="Name Your Chatroom"
+            type="text"
+            id="room"
+            name="room"
+            class="mb-4 w-[14rem] rounded-md border-2 border-blue-500 p-0.5 focus:border-blue-800 focus:outline-none sm:w-[17rem]"
+            required
+          />
+
+          <button
+            class="rounded-md bg-blue-700 sm:px-[4.4rem] px-12 p-1 text-white hover:bg-blue-800"
+            type="submit"
+          >
+            Create Chatroom
+          </button>
+        </form>
+        <div class="custom-shape-divider-bottom-1709192263">
+          <svg
+            data-name="Layer 1"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+              class="shape-fill"
+            ></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <section>
+      <div class="mt-[5rem] p-5 bg-light-blue">
+        <div class="flex justify-center items-start my-2">
+          <div class="w-full sm:w-10/12 md:w-1/2 my-1">
+            <h2 class="text-xl font-semibold text-vnet-blue mb-2">FAQs</h2>
+            <ul id="faq" class="flex flex-col"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="bg-black">
+      <ul class="none flex justify-center space-x-8 text-white underline">
+        <li><a href="https://github.com/ERRORLY/DispoChat">source code</a></li>
+        <li><a href="https://github.com/ERRORLY/DispoChat/issues">bug</a></li>
+        <li><a href="mailto:itest7416@gmail.com">contact us</a></li>
+      </ul>
+    </footer>
+
+    <script>
+      document
+        .querySelector("form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent the default form submission behavior
+
+          var nicknameInput = document.getElementById("nickname");
+          var roomInput = document.getElementById("room");
+
+          var nickname = nicknameInput.value.trim();
+          var room = roomInput.value.trim();
+
+          if (nickname !== "" && room !== "") {
+            window.location.href = "/chatroom/" + room + "/" + nickname;
+          }
+        });
+
+      const faq_dict = {
+        "How It Works": `If You are developer you can check it from <span class="underline"><a href='#'>here</a></span>. Or if you are normal human being and have a life you can understand it like it store all your data locally in your browser and when you leave the chatroom every data got removed from your browser`,
+        "How Can I be Sure It's not collecting data": `All source code is at <span class="underline"><a href='#'>github</a></span> you can check it out the whole code, you can go and run the site locally if you dont believe this site`,
+      };
+
+      let clutter = "";
+      const faq = document.getElementById("faq");
+      let i = 1;
+
+      for (var q in faq_dict) {
+        if (faq_dict.hasOwnProperty(q)) {
+          clutter += `<li class="bg-white my-2 shadow-lg" x-data="accordion(${i})">
+          <h2
+            @click="handleClick()"
+            class="flex flex-row justify-between items-center font-semibold p-3 cursor-pointer"
+          >
+            <span>${q}</span>
+            <svg
+              :class="handleRotate()"
+              class="fill-current text-blue-800 h-6 w-6 transform transition-transform duration-500"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M13.962,8.885l-3.736,3.739c-0.086,0.086-0.201,0.13-0.314,0.13S9.686,12.71,9.6,12.624l-3.562-3.56C5.863,8.892,5.863,8.611,6.036,8.438c0.175-0.173,0.454-0.173,0.626,0l3.25,3.247l3.426-3.424c0.173-0.172,0.451-0.172,0.624,0C14.137,8.434,14.137,8.712,13.962,8.885 M18.406,10c0,4.644-3.763,8.406-8.406,8.406S1.594,14.644,1.594,10S5.356,1.594,10,1.594S18.406,5.356,18.406,10 M17.521,10c0-4.148-3.373-7.521-7.521-7.521c-4.148,0-7.521,3.374-7.521,7.521c0,4.147,3.374,7.521,7.521,7.521C14.148,17.521,17.521,14.147,17.521,10"
+              ></path>
+            </svg>
+          </h2>
+          <div
+            x-ref="tab"
+            :style="handleToggle()"
+            class="border-l-2 border-blue-800 overflow-hidden max-h-0 duration-500 transition-all"
+          >
+            <p class="p-3 text-gray-900">
+              ${faq_dict[q]}
+            </p>
+          </div>
+        </li>`;
+          i += 1;
+        }
+      }
+      faq.innerHTML += clutter;
+
+      document.addEventListener("alpine:init", () => {
+        Alpine.store("accordion", {
+          tab: 0,
+        });
+
+        Alpine.data("accordion", (idx) => ({
+          init() {
+            this.idx = idx;
+          },
+          idx: -1,
+          handleClick() {
+            this.$store.accordion.tab =
+              this.$store.accordion.tab === this.idx ? 0 : this.idx;
+          },
+          handleRotate() {
+            return this.$store.accordion.tab === this.idx ? "rotate-180" : "";
+          },
+          handleToggle() {
+            return this.$store.accordion.tab === this.idx
+              ? `max-height: ${this.$refs.tab.scrollHeight}px`
+              : "";
+          },
+        }));
+      });
+    </script>
+  </body>
+</html>

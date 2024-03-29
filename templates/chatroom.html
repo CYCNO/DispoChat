@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.4/purify.min.js"></script>
+    <title>Chatroom</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        margin-top: -45px;
+      }
+
+      #chat {
+        max-height: 400px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 20px;
+        white-space: pre-wrap;
+        font-family: monospace;
+      }
+
+      form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #message_input {
+        margin-right: 10px;
+        padding: 7px;
+        width: 40%;
+        resize: none;
+        font-family: monospace;
+      }
+
+      button {
+        background-color: #172bff;
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #1a12ff;
+      }
+
+      .share-link {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
+
+      .copy-message {
+        color: #4caf50;
+        font-weight: bold;
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <a href="/" title="leave">
+      <img
+        src="/static/images/leave.png"
+        alt="leave"
+        style="width: 40px; height: 40px; margin-right: 10px"
+      />
+    </a>
+    <h1>Chatroom Name: {{ room }}</h1>
+
+    <div id="chat"></div>
+    <form id="form">
+      <textarea
+        id="message_input"
+        autocomplete="off"
+        placeholder="Type your Message, Code..."
+        rows="4"
+      ></textarea>
+      <button type="button" onclick="sendMessage()">Send</button>
+    </form>
+
+    <div class="share-link" title="Copy Link">
+      <p id="copyMessage" class="copy-message">Link copied!</p>
+      <a href="javascript:void(0);" onclick="copyLink()">Share</a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.4/purify.min.js"></script>
+    <script>
+      var socket = io.connect(
+        "https://" + document.domain + ":" + location.port
+      );
+
+      function joinChatroom() {
+        socket.emit("join", { room: "{{ room }}", nickname: "{{ nickname }}" });
+      }
+
+      function appendMessage(data) {
+        var chatDiv = document.getElementById("chat");
+        var messageElement = document.createElement("p");
+        var messageContent =
+          "<strong>" + data.nickname + "</strong>: " + escapeHtml(data.message);
+        messageElement.innerHTML = messageContent;
+        chatDiv.appendChild(messageElement);
+      }
+
+      function escapeHtml(html) {
+        var text = document.createTextNode(html);
+        var div = document.createElement("div");
+        div.appendChild(text);
+        return div.innerHTML;
+      }
+
+      function appendUserJoined(data) {
+        var chatDiv = document.getElementById("chat");
+        var messageElement = document.createElement("i");
+        messageElement.innerHTML =
+          "<strong>" + data.nickname + " joined the chat." + "<strong>";
+        chatDiv.appendChild(messageElement);
+      }
+
+      function appendUserLeft(data) {
+        var chatDiv = document.getElementById("chat");
+        var messageElement = document.createElement("p");
+        messageElement.textContent = data.nickname + " left the chat.";
+        chatDiv.appendChild(messageElement);
+      }
+
+      socket.on("message", appendMessage);
+      socket.on("user_joined", appendUserJoined);
+      socket.on("user_left", appendUserLeft);
+
+      function sendMessage() {
+        var messageInput = document.getElementById("message_input");
+        var message = messageInput.value.trim();
+
+        if (message !== "") {
+          socket.emit("message", {
+            room: "{{ room }}",
+            nickname: "{{ nickname }}",
+            message: message,
+          });
+          messageInput.value = "";
+        }
+      }
+
+      document
+        .getElementById("message_input")
+        .addEventListener("keydown", function (event) {
+          if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+          }
+        });
+
+      function copyLink() {
+        var link = "{{ url_for('enter_chatroom', room=room, _external=True) }}";
+        console.log("Copying link:", link);
+
+        // Create a temporary text area
+        var tempTextArea = document.createElement("textarea");
+        tempTextArea.value = link;
+
+        // Append the text area to the document
+        document.body.appendChild(tempTextArea);
+
+        // Select the text in the text area
+        tempTextArea.select();
+        tempTextArea.setSelectionRange(0, 99999); // For mobile devices
+
+        // Execute the copy command
+        document.execCommand("copy");
+
+        // Remove the temporary text area
+        document.body.removeChild(tempTextArea);
+
+        // Display the "Link copied!" message
+        var copyMessage = document.getElementById("copyMessage");
+        copyMessage.style.display = "inline";
+        setTimeout(function () {
+          copyMessage.style.display = "none";
+        }, 2000);
+      }
+
+      joinChatroom();
+    </script>
+  </body>
+</html>

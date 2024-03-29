@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        padding: 0%;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: #7ffaff; /* Light aqua background color */
+        font-family: "Poppins", sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .box {
+        background-color: #ffffff;
+        width: 350px;
+        height: 200px;
+        padding: 20px; /* Added padding for better spacing */
+        border-radius: 8px;
+        box-shadow: 0 0 10px 5px rgba(35, 35, 35, 0.1); /* Lighter shadow color */
+        text-align: center;
+      }
+
+      .text {
+        background: #ffffff;
+        font-size: x-large;
+        color: #1c1c1c; /* Aqua text color */
+        padding: 10px;
+        border-radius: 8px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      input {
+        padding: 10px;
+        border: 1px solid #4ba3c7;
+        border-radius: 8px;
+        width: 70%;
+        outline: none;
+        caret-color: rgb(0, 0, 0);
+        caret-shape: block;
+        font-size: 15px;
+      }
+
+      button {
+        padding: 10px;
+        background-color: #2759ff; /* Aqua button background color */
+        border: none;
+        border-radius: 8px;
+        color: #ffffff; /* White text color for the button */
+        font-size: 15px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      button:hover {
+        background-color: #0f23f8; /* Darker color on hover */
+      }
+
+      /* Media query for screens with a width of 402px or less */
+      @media (max-width: 402px) {
+        .box {
+          width: 90%; /* Adjusted width for smaller screens */
+          margin-left: auto; /* Add spacing to the left */
+          margin-right: auto; /* Add spacing to the right */
+        }
+        .text {
+          margin: auto;
+          padding: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <a class="text">Choose your Nickname</a>
+      <form method="get" action="{{ url_for('enter_chatroom', room=room) }}">
+        <input
+          type="text"
+          id="nickname"
+          name="nickname"
+          placeholder="Enter your nickname"
+          required
+        />
+        <button type="submit">Join Chatroom</button>
+      </form>
+    </div>
+  </body>
+</html>
