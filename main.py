@@ -74,4 +74,4 @@ def is_nickname_taken(room, nickname):
     return nickname in chat_room.get(room, [])
 
 if __name__ == "__main__":
-    socketio.run(app, host='127.0.0.1', port=8081)
+    socketio.run(app, host='127.0.0.1', port=5000)
