@@ -1,8 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, CORS
+from flask import Flask, render_template, request, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room
 
 app = Flask(__name__)
-CORS(app)
 socketio = SocketIO(app)
 
 # Chatroom state
